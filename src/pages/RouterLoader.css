@@ -1,0 +1,16 @@
+.router-loader__spinner {
+    --size: 14px;
+
+    width: var(--size);
+    height: var(--size);
+    border: 2px solid var(--accent-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: router-loader-spin 800ms linear infinite;
+}
+
+@keyframes router-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
