@@ -2,7 +2,7 @@ import {type Salary, type SalaryType, salaryTypes, type Vacancy} from "@/types/t
 import {useAppSelector} from "@/app/hooks.ts"
 import {companiesSelector, nextCompanyIdSelector, nextVacancyIdSelector} from "@/app/selectors.ts"
 import {type SubmitEvent, useState} from "react"
-import {getCurrentDateUtil} from "@/utils/dateUtils.ts";
+import {getCurrentDateUtil} from "@/utils/dateUtils.ts"
 
 type Props = {
     onCreateNewCompany: (companyId: number, name: string, link?: string) => void;
