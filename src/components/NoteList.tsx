@@ -35,24 +35,18 @@ function NoteList({vacancy, company}: Props) {
             <h3>Notes for {vacancy.name} @ {company?.name ?? 'Unknown Company'}</h3>
             <div>
                 {notes.map((note, idx) => (note.id !== currentEditingNote?.id ?
-                    <div>
+                    <div key={`note-${note.id}`}>
                         <p>{idx+1} {note.note}</p>
                         <span>
-                            {note.id === currentEditingNote?.id ?
-                                <button type='button' onClick={() => setCurrentEditingNote(undefined)}>
-                                    Stop editing
-                                </button>
-                            :
-                                <button type='button' onClick={() => setCurrentEditingNote(note)}>
-                                    Edit
-                                </button>
-                            }
+                            <button type='button' onClick={() => setCurrentEditingNote(note)}>
+                                Edit
+                            </button>
                             <button type='button' onClick={() => handleRemoveNote(note.id)}>
                                 Delete
                             </button>
                         </span>
                     </div> :
-                    <div>
+                    <div key={`note-edit-${note.id}`}>
                         <aside>{idx+1}</aside>
                         <NoteEditorForm
                             onSubmit={handleUpdateNote}

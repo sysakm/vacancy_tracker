@@ -1,6 +1,6 @@
 import type {Vacancy} from "@/types/types.ts"
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit"
-import {clearCompanies, removeCompany} from "@/features/companies/companiesSlice.ts"
+import {clearCompanies} from "@/features/companies/companiesSlice.ts"
 
 type VacanciesState = {
     vacancies: Array<Vacancy>;
@@ -29,11 +29,6 @@ const vacanciesSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(
-            removeCompany,
-            (state, action) => {
-                state.vacancies = state.vacancies.filter(vacancy => vacancy.companyId !== action.payload)
-            }
-        ).addCase(
             clearCompanies,
             () => {
                 return initialState
