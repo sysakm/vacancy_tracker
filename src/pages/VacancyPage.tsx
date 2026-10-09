@@ -6,10 +6,11 @@ import type {Vacancy} from "@/types/types.ts"
 import {removeVacancy, updateVacancy} from "@/features/vacancies/vacanciesSlice.ts"
 import {useState} from "react"
 import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
-import VacancyCard from "@/components/VacancyCard.tsx";
+import VacancyCard from "@/components/VacancyCard.tsx"
+import NoteList from "@/components/NoteList.tsx"
 
 const subPageEntries = [
-    'description', 'contacts'
+    'description', 'contacts', 'notes'
 ] as const
 
 function VacancyPage() {
@@ -76,10 +77,13 @@ function VacancyPage() {
                         {company?.link && <a href={company.link}>Company page</a>}
                         {vacancy?.link && <a href={vacancy.link}>Vacancy posting</a>}
                     </>)}
+                    {subPage === 'notes' && (
+                        <NoteList vacancy={vacancy} company={company}/>
+                    )}
                 </>
             :
                 <>
-                    <p>Something went wrong - no such trip in store</p>
+                    <p>Something went wrong - no such vacancy in store</p>
                     <Link to='/'>Back To Dashboard</Link>
                 </>
             }

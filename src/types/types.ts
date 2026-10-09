@@ -22,3 +22,9 @@ export type Company = {
     name: string;
     link?: string;
 }
+
+export type VacancyNote = {
+    id: number;
+    vacancyId: number;
+    note: string;
+}

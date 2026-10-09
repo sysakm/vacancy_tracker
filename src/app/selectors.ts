@@ -17,3 +17,12 @@ export const nextVacancyIdSelector = (state: RootState): number => {
         return 1
     }
 }
+
+export const notesSelector = (state: RootState) => state.notes.notes
+export const nextNoteIdSelector = (state: RootState): number => {
+    if (state.notes.notes.length) {
+        return 1 + Math.max(...state.notes.notes.map(vacancy => vacancy.id))
+    } else {
+        return 1
+    }
+}
