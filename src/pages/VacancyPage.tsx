@@ -8,6 +8,7 @@ import {useState} from "react"
 import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
 import VacancyCard from "@/components/VacancyCard.tsx"
 import NoteList from "@/components/NoteList.tsx"
+import ContactList from "@/components/ContactList.tsx";
 
 const subPageEntries = [
     'description', 'contacts', 'notes'
@@ -73,10 +74,9 @@ function VacancyPage() {
                             </button>
                         </div>
                     </>)}
-                    {subPage === 'contacts' && (<>
-                        {company?.link && <a href={company.link}>Company page</a>}
-                        {vacancy?.link && <a href={vacancy.link}>Vacancy posting</a>}
-                    </>)}
+                    {subPage === 'contacts' && (
+                        <ContactList vacancy={vacancy} company={company}/>
+                    )}
                     {subPage === 'notes' && (
                         <NoteList vacancy={vacancy} company={company}/>
                     )}

@@ -6,8 +6,8 @@ import {addNote, removeNote, updateNote} from "@/features/notes/notesSlice.ts"
 import {useState} from "react"
 
 type Props = {
-    vacancy: Vacancy,
-    company?: Company
+    vacancy: Vacancy;
+    company?: Company;
 }
 
 function NoteList({vacancy, company}: Props) {
@@ -57,7 +57,7 @@ function NoteList({vacancy, company}: Props) {
                 ))}
             </div>
             {!currentEditingNote && <NoteEditorForm
-                key={`note-editor-${vacancy.id}--1-${notes.length}`}
+                key={`note-editor-${vacancy.id}-${notes.length}`}
                 onSubmit={handleAddNote}
                 vacancyId={vacancy.id}
             />}

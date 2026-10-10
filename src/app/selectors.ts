@@ -26,3 +26,12 @@ export const nextNoteIdSelector = (state: RootState): number => {
         return 1
     }
 }
+
+export const contactsSelector = (state: RootState) => state.contacts.contacts
+export const nextContactIdSelector = (state: RootState): number => {
+    if (state.contacts.contacts.length) {
+        return 1 + Math.max(...state.contacts.contacts.map(vacancy => vacancy.id))
+    } else {
+        return 1
+    }
+}

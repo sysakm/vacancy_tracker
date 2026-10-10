@@ -6,7 +6,6 @@ export type Salary =
     | {type: 'fixed', value: number}
     | {type: 'fork', start: number, end: number}
 
-
 export type Vacancy = {
     id: number;
     companyId: number;
@@ -21,6 +20,20 @@ export type Company = {
     id: number;
     name: string;
     link?: string;
+}
+
+export const contactTypes = ['recruiter', 'manager', 'other'] as const
+export type ContactType = typeof contactTypes[number]
+export type VacancyContact = {
+    id: number;
+    vacancyId: number;
+    type: ContactType;
+    name: string;
+    description?: string;
+
+    phone?: string;
+    email?: string;
+    telegram?: string;
 }
 
 export type VacancyNote = {
