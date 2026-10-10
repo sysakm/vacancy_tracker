@@ -28,3 +28,11 @@ export type VacancyUpdate = {
     description: string;
     stepDatetime?: string;  // YYYY-MM-DDThh:mm
 }
+
+export type StepType = 'posted' | UpdateType | 'interview' | 'deadline'
+export type VacancyStep = {
+    baseId?: number;
+    type: StepType;
+    datetime: string;
+    description: string;
+}

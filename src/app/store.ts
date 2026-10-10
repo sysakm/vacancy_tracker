@@ -2,6 +2,7 @@ import companiesReducer from "@/features/companies/companiesSlice.ts"
 import vacanciesReducer from "@/features/vacancies/vacanciesSlice.ts"
 import notesReducer from "@/features/notes/notesSlice.ts"
 import contactsReducer from "@/features/contacts/contactsSlice.ts"
+import updatesReducer from "@/features/updates/updatesSlice.ts"
 import {configureStore} from "@reduxjs/toolkit"
 import {logger} from "redux-logger"
 import {loadState, saveState, throttle} from "@/utils/localStorageUtils.ts"
@@ -11,7 +12,8 @@ export const store = configureStore({
         companies: companiesReducer,
         vacancies: vacanciesReducer,
         notes: notesReducer,
-        contacts: contactsReducer
+        contacts: contactsReducer,
+        updates: updatesReducer
     },
     preloadedState: loadState(),
     middleware: (getDefaultMiddleware) => {

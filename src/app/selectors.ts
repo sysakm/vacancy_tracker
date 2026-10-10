@@ -35,3 +35,12 @@ export const nextContactIdSelector = (state: RootState): number => {
         return 1
     }
 }
+
+export const updatesSelector = (state: RootState) => state.updates.updates
+export const nextUpdateIdSelector = (state: RootState): number => {
+    if (state.updates.updates.length) {
+        return 1 + Math.max(...state.updates.updates.map(vacancy => vacancy.id))
+    } else {
+        return 1
+    }
+}

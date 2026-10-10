@@ -9,9 +9,11 @@ import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
 import VacancyCard from "@/components/VacancyCard.tsx"
 import NoteList from "@/components/NoteList.tsx"
 import ContactList from "@/components/ContactList.tsx"
+import UpdateAdditionForm from "@/components/UpdateAdditionForm.tsx";
+import VacancyTimeline from "@/components/VacancyTimeline.tsx";
 
 const subPageEntries = [
-    'description', 'contacts', 'notes'
+    'description', 'timeline', 'contacts', 'notes'
 ] as const
 
 function VacancyPage() {
@@ -79,6 +81,12 @@ function VacancyPage() {
                     )}
                     {subPage === 'notes' && (
                         <NoteList vacancy={vacancy} company={company}/>
+                    )}
+                    {subPage === 'timeline' && (
+                        <>
+                            <VacancyTimeline vacancy={vacancy} company={company}/>
+                            <UpdateAdditionForm vacancy={vacancy}/>
+                        </>
                     )}
                 </>
             :
