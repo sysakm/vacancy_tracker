@@ -18,6 +18,9 @@ export const endUpdateTypes = [
 ] as const
 export type EndUpdateType = typeof endUpdateTypes[number]
 
+export const allUpdateTypes = [
+    ...startUpdateTypes, ...interviewUpdateTypes,
+    ...checkUpdateTypes, ...endUpdateTypes] as const
 export type UpdateType = StartUpdateType | InterviewUpdateType | CheckUpdateType | EndUpdateType
 
 export type VacancyUpdate = {

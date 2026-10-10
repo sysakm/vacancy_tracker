@@ -1,4 +1,4 @@
-import {type Salary, type SalaryType, salaryTypes, type Vacancy} from "@/types/vacancyTypes.ts"
+import {type Company, type Salary, type SalaryType, salaryTypes, type Vacancy} from "@/types/vacancyTypes.ts"
 import {useAppSelector} from "@/app/hooks.ts"
 import {companiesSelector, nextCompanyIdSelector, nextVacancyIdSelector} from "@/app/selectors.ts"
 import {type SubmitEvent, useState} from "react"
@@ -8,6 +8,23 @@ type Props = {
     onCreateNewCompany: (companyId: number, name: string, link?: string) => void;
     onSubmit: (formData: Vacancy) => void;
     vacancy?: Vacancy;
+}
+
+function validateForm(
+    selectedCompany: Company | undefined, newCompanyName: string, newCompanyLink: string,
+    name: string, description: string, date: string, link: string,
+    salaryType: SalaryType, salaryFirst: number, salarySecond: number): string | null {
+    if (!selectedCompany && !newCompanyName.trim()) return 'New company name can not be empty'
+    if (!selectedCompany && newCompanyLink && !newCompanyLink.trim()) return 'Please enter a valid company link or leave the field empty'
+    if (!name.trim()) return 'Vacancy name can not be empty'
+    if (!description.trim()) return 'Vacancy description can not be empty'
+    if (!date) return 'Please enter the date of posting'
+    if (link && !link.trim()) return 'Please enter a valid posting link or leave the field empty'
+    if (salaryType === 'fixed' && (isNaN(salaryFirst) || salaryFirst <= 0)) return 'Please enter a valid fixed salary'
+    if (salaryType === 'fork' && (
+        isNaN(salaryFirst) || salaryFirst <= 0 ||
+        isNaN(salarySecond) || salarySecond <= 0 || salaryFirst >= salarySecond)) return 'Please enter a valid salary range'
+    return null
 }
 
 function createSalaryObject(salaryType: SalaryType, salaryFirst: number, salarySecond: number): Salary {
@@ -43,6 +60,8 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
         }
     )
 
+    const [error, setError] = useState('')
+
     const nextId = useAppSelector(nextVacancyIdSelector)
     const nextCompanyId = useAppSelector(nextCompanyIdSelector)
     const companies = useAppSelector(companiesSelector)
@@ -50,18 +69,38 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
 
     function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault()
-        if (!selectedCompany) {
-            onCreateNewCompany(nextCompanyId, newCompanyName, newCompanyLink)
+        const newError = validateForm(
+            selectedCompany, newCompanyName, newCompanyLink,
+            name, description, date, link,
+            salaryType, salaryFirst, salarySecond
+        )
+        if (newError) {
+            setError(newError)
+        } else {
+            if (!selectedCompany) {
+                onCreateNewCompany(nextCompanyId, newCompanyName.trim(), newCompanyLink.trim())
+            }
+            onSubmit({
+                id: vacancy?.id ?? nextId,
+                companyId: selectedCompany?.id ?? nextCompanyId,
+                name: name.trim(),
+                salary: createSalaryObject(salaryType as SalaryType, salaryFirst, salarySecond),
+                description: description.trim(),
+                datePosted: date,
+                link: link.trim()
+            })
+            setCompanyId('')
+            setNewCompanyName('')
+            setNewCompanyLink('')
+            setName('')
+            setDescription('')
+            setDate('')
+            setLink('')
+            setSalaryType('unknown')
+            setSalaryFirst(1000)
+            setSalarySecond(1001)
+            setError('')
         }
-        onSubmit({
-            id: vacancy?.id ?? nextId,
-            companyId: selectedCompany?.id ?? nextCompanyId,
-            name,
-            salary: createSalaryObject(salaryType as SalaryType, salaryFirst, salarySecond),
-            description,
-            datePosted: date,
-            link
-        })
     }
 
     return (
@@ -156,6 +195,7 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
             <div>
                 <button type='submit'>{vacancy ? 'Update vacancy' : 'Add vacancy'}</button>
             </div>
+            {error && (<p className='form__error' role='alert'>{error}</p>)}
         </form>
     )
 }

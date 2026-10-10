@@ -3,6 +3,7 @@ import type {Vacancy} from "@/types/vacancyTypes.ts"
 import {useAppDispatch, useAppSelector} from "@/app/hooks.ts"
 import {nextUpdateIdSelector} from "@/app/selectors.ts"
 import {
+    allUpdateTypes,
     checkUpdateTypes, endUpdateTypes,
     type InterviewUpdateType,
     interviewUpdateTypes,
@@ -15,10 +16,26 @@ type Props = {
     vacancy: Vacancy
 }
 
-function UpdateAdditionForm({vacancy}: Props) {
-    const dispatch = useAppDispatch()
-    const newId = useAppSelector(nextUpdateIdSelector)
+function validateForm(
+    postingDate: string,
+    updateType: UpdateType | '', updateDate: string, updateTime: string,
+    stepDate: string, stepTime: string, description: string): string | null {
+    if (!updateType || !allUpdateTypes.includes(updateType as UpdateType)) return 'Please choose a valid update type'
+    if (!updateDate || !updateTime) return 'Please choose a valid update date and time'
+    if (interviewUpdateTypes.includes(updateType as InterviewUpdateType)) {
+        if (!stepDate || !stepTime)
+            return 'Please choose a valid step date and time or set a different update type'
+        if (updateDate.localeCompare(stepDate) > 0 || updateDate.localeCompare(stepDate) === 0 && updateTime.localeCompare(stepTime) > 0)
+            return 'Next step time can not be earlier than the update time'
+        if (stepDate.localeCompare(postingDate) < 0)
+            return 'Step date can not be earlier than the date of vacancy posting'
+    }
+    if (updateDate.localeCompare(postingDate) < 0) return 'Update date can not be earlier than the date of vacancy posting'
+    if (!description.trim()) return 'Update description can not be empty'
+    return null
+}
 
+function UpdateAdditionForm({vacancy}: Props) {
     const [updateType, setUpdateType] = useState<UpdateType | ''>('')
     const [updateDate, setUpdateDate] = useState('')
     const [updateTime, setUpdateTime] = useState('')
@@ -26,19 +43,36 @@ function UpdateAdditionForm({vacancy}: Props) {
     const [stepTime, setStepTime] = useState('')
     const [description, setDescription] = useState('')
 
+    const [error, setError] = useState('')
+
+    const dispatch = useAppDispatch()
+    const newId = useAppSelector(nextUpdateIdSelector)
+
     function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault()
-        if (interviewUpdateTypes.includes(updateType as InterviewUpdateType)) {
-            dispatch(addUpdate({
-                id: newId, vacancyId: vacancy.id, type: updateType as InterviewUpdateType,
-                datetime: `${updateDate}T${updateTime}`, description,
-                stepDatetime: `${stepDate}T${stepTime}`
-            }))
-        } else if (updateType !== '') {
-            dispatch(addUpdate({
-                id: newId, vacancyId: vacancy.id, type: updateType as InterviewUpdateType,
-                datetime: `${updateDate}T${updateTime}`, description
-            }))
+        const newError = validateForm(vacancy.datePosted, updateType, updateDate, updateTime, stepDate, stepTime, description)
+        if (newError) {
+            setError(newError)
+        } else {
+            if (interviewUpdateTypes.includes(updateType as InterviewUpdateType)) {
+                dispatch(addUpdate({
+                    id: newId, vacancyId: vacancy.id, type: updateType as InterviewUpdateType,
+                    datetime: `${updateDate}T${updateTime}`, description: description.trim(),
+                    stepDatetime: `${stepDate}T${stepTime}`
+                }))
+            } else if (updateType !== '') {
+                dispatch(addUpdate({
+                    id: newId, vacancyId: vacancy.id, type: updateType as InterviewUpdateType,
+                    datetime: `${updateDate}T${updateTime}`, description: description.trim()
+                }))
+            }
+            setUpdateType('')
+            setUpdateDate('')
+            setUpdateTime('')
+            setStepDate('')
+            setStepTime('')
+            setDescription('')
+            setError('')
         }
     }
 
@@ -114,6 +148,7 @@ function UpdateAdditionForm({vacancy}: Props) {
                 </label>
             </div>}
             <button type='submit'>Add Update</button>
+            {error && (<p className='form__error' role='alert'>{error}</p>)}
         </form>
     )
 }

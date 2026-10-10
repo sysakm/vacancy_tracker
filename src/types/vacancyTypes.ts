@@ -29,7 +29,7 @@ export type VacancyContact = {
     vacancyId: number;
     type: ContactType;
     name: string;
-    description?: string;
+    description: string;
 
     phone?: string;
     email?: string;

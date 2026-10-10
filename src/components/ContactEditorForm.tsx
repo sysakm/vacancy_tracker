@@ -9,11 +9,23 @@ type Props = {
     vacancyId?: number;
 }
 
+function validateForm(
+    realVacancyId: number | null,
+    contactType: ContactType, name: string, description: string,
+    phone: string, email: string, telegram: string): string | null {
+    if (!realVacancyId) return 'Something went wrong - can not find the vacancy'
+    if (!contactTypes.includes(contactType)) return 'Please choose a valid contact type'
+    if (!name.trim()) return 'Contact name can not be empty'
+    if (!description.trim()) return 'Contact description can not be empty'
+    if (!phone.trim() && !email.trim() && !telegram.trim()) return 'Please enter at least one contact address'
+    if (telegram.trim() && telegram.trim().startsWith('@')) return 'Please enter Telegram handle without the @'
+    return null
+}
+
 function createContact(id: number, vacancyId: number,
                        contactType: ContactType, name: string, description: string,
                        phone: string, email: string, telegram: string ): VacancyContact {
-    let obj: VacancyContact = {id, vacancyId, type: contactType, name}
-    if (description) obj.description = description
+    let obj: VacancyContact = {id, vacancyId, type: contactType, name, description}
     if (phone) obj.phone = phone
     if (email) obj.email = email
     if (telegram) obj.telegram = telegram
@@ -29,14 +41,29 @@ function ContactEditorForm({onSubmit, contact, vacancyId}: Props) {
     const [email, setEmail] = useState(contact?.email ?? '')
     const [telegram, setTelegram] = useState(contact?.telegram ?? '')
 
+    const [error, setError] = useState('')
+
     const nextId= useAppSelector(nextContactIdSelector)
 
     const realVacancyId = contact?.vacancyId ?? vacancyId ?? null
 
     function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault()
-        if (realVacancyId) {
-            onSubmit(createContact(contact?.id ?? nextId, realVacancyId, contactType, name, description, phone, email, telegram))
+        const newError = validateForm(realVacancyId, contactType, name, description, phone, email, telegram)
+        if (newError || !realVacancyId) {
+            setError(newError ?? 'Something went wrong')
+        } else {
+            onSubmit(createContact(
+                contact?.id ?? nextId, realVacancyId, contactType, name.trim(), description.trim(),
+                phone.trim(), email.trim(), telegram.trim()
+            ))
+            setContactType('recruiter')
+            setName('')
+            setDescription('')
+            setPhone('')
+            setEmail('')
+            setTelegram('')
+            setError('')
         }
     }
 
@@ -62,7 +89,7 @@ function ContactEditorForm({onSubmit, contact, vacancyId}: Props) {
                 />
             </label>
             <label htmlFor='contactDescription'>
-                <span>Additional Notes</span>
+                <span>Description</span>
                 <textarea
                     id='contactDescription' value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -92,6 +119,7 @@ function ContactEditorForm({onSubmit, contact, vacancyId}: Props) {
                 </label>
             </div>
             <button type='submit'>{contact ? 'Update contact' : 'Add contact'}</button>
+            {error && (<p className='form__error' role='alert'>{error}</p>)}
         </form>
     )
 }
