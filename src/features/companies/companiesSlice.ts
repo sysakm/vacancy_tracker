@@ -1,4 +1,4 @@
-import type {Company} from "@/types/types.ts"
+import type {Company} from "@/types/vacancyTypes.ts"
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit"
 
 type CompaniesState = {

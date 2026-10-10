@@ -1,4 +1,4 @@
-import type {VacancyContact} from "@/types/types.ts"
+import type {VacancyContact} from "@/types/vacancyTypes.ts"
 
 type Props = {
     contact: VacancyContact;

@@ -2,13 +2,13 @@ import {Link, useNavigate, useParams} from "react-router-dom"
 import {useAppDispatch, useAppSelector} from "@/app/hooks.ts"
 import {companiesSelector, vacanciesSelector} from "@/app/selectors.ts"
 import {addCompany} from "@/features/companies/companiesSlice.ts"
-import type {Vacancy} from "@/types/types.ts"
+import type {Vacancy} from "@/types/vacancyTypes.ts"
 import {removeVacancy, updateVacancy} from "@/features/vacancies/vacanciesSlice.ts"
 import {useState} from "react"
 import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
 import VacancyCard from "@/components/VacancyCard.tsx"
 import NoteList from "@/components/NoteList.tsx"
-import ContactList from "@/components/ContactList.tsx";
+import ContactList from "@/components/ContactList.tsx"
 
 const subPageEntries = [
     'description', 'contacts', 'notes'

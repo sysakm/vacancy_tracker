@@ -12,7 +12,7 @@ export type Vacancy = {
     name: string;
     salary: Salary;
     description: string;
-    datePosted: string;
+    datePosted: string;  // YYYY-MM-DD
     link?: string;
 }
 

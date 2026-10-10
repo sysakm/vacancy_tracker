@@ -1,4 +1,4 @@
-import type {VacancyContact} from "@/types/types.ts"
+import type {VacancyContact} from "@/types/vacancyTypes.ts"
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit"
 import {removeVacancy} from "@/features/vacancies/vacanciesSlice.ts"
 import {clearCompanies} from "@/features/companies/companiesSlice.ts"

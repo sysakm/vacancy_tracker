@@ -1,4 +1,4 @@
-import {type Salary, type SalaryType, salaryTypes, type Vacancy} from "@/types/types.ts"
+import {type Salary, type SalaryType, salaryTypes, type Vacancy} from "@/types/vacancyTypes.ts"
 import {useAppSelector} from "@/app/hooks.ts"
 import {companiesSelector, nextCompanyIdSelector, nextVacancyIdSelector} from "@/app/selectors.ts"
 import {type SubmitEvent, useState} from "react"

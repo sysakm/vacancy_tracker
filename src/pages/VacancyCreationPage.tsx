@@ -1,9 +1,9 @@
 import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
 import {useAppDispatch} from "@/app/hooks.ts"
 import { addCompany } from "@/features/companies/companiesSlice"
-import type {Vacancy} from "@/types/types.ts"
+import type {Vacancy} from "@/types/vacancyTypes.ts"
 import {addVacancy} from "@/features/vacancies/vacanciesSlice.ts"
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom"
 
 function VacancyCreationPage() {
     const navigate = useNavigate()

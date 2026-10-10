@@ -1,4 +1,4 @@
-import type {Company, Vacancy, VacancyContact} from "@/types/types.ts"
+import type {Company, Vacancy, VacancyContact} from "@/types/vacancyTypes.ts"
 import {contactsSelector} from "@/app/selectors.ts"
 import {useAppDispatch, useAppSelector} from "@/app/hooks.ts"
 import ContactEditorForm from "@/components/ContactEditorForm.tsx"

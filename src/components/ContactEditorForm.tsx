@@ -1,5 +1,5 @@
 import {type SubmitEvent, useState} from "react"
-import {type ContactType, contactTypes, type VacancyContact} from "@/types/types.ts"
+import {type ContactType, contactTypes, type VacancyContact} from "@/types/vacancyTypes.ts"
 import {useAppSelector} from "@/app/hooks.ts"
 import {nextContactIdSelector} from "@/app/selectors.ts"
 

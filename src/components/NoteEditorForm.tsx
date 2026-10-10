@@ -1,4 +1,4 @@
-import {type VacancyNote} from "@/types/types.ts"
+import {type VacancyNote} from "@/types/vacancyTypes.ts"
 import {type SubmitEvent, useState} from "react"
 import {nextNoteIdSelector} from "@/app/selectors.ts"
 import {useAppSelector} from "@/app/hooks.ts"
