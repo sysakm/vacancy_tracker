@@ -1,11 +1,7 @@
 import type {RootState} from "@/app/store.ts"
-// import {validateRootState} from "@/utils/localStorageValidationUtils.ts"
+import {validateRootState} from "@/utils/localStorageValidationUtils.ts"
 
-function validateRootState(_state: unknown) {
-    return true
-}
-
-const STORAGE_KEY = 'vacancy-tracker-application-rtk-state-v0'
+const STORAGE_KEY = 'vacancy-tracker-application-rtk-state-v1'
 
 function clearState() {
     localStorage.removeItem(STORAGE_KEY)
