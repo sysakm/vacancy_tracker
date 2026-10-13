@@ -7,6 +7,7 @@ function AppLayout() {
                 <nav>
                     <NavLink to='/'>Home</NavLink>
                     <NavLink to='/create'>Add Vacancy</NavLink>
+                    <NavLink to='/companies'>Companies</NavLink>
                 </nav>
             </header>
             <main>

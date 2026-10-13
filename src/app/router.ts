@@ -5,6 +5,7 @@ import RouterError from "@/pages/RouterError.tsx"
 import RouterLoader from "@/pages/RouterLoader.tsx"
 import VacancyCreationPage from "@/pages/VacancyCreationPage.tsx"
 import VacancyPage from "@/pages/VacancyPage.tsx"
+import CompaniesPage from "@/pages/CompaniesPage.tsx"
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +25,11 @@ export const router = createBrowserRouter([
             {
                 path: 'vacancy/:id',
                 Component: VacancyPage,
+                HydrateFallback: RouterLoader
+            },
+            {
+                path: 'companies',
+                Component: CompaniesPage,
                 HydrateFallback: RouterLoader
             }
         ]

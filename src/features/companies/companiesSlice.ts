@@ -16,6 +16,12 @@ const companiesSlice = createSlice({
         addCompany(state, action: PayloadAction<Company>) {
             state.companies.push(action.payload)
         },
+        updateCompany(state, action: PayloadAction<Company>) {
+            const idx = state.companies.findIndex(company => company.id === action.payload.id)
+            if (idx !== -1) {
+                state.companies[idx] = action.payload
+            }
+        },
         removeCompany(state, action: PayloadAction<number>) {
             state.companies = state.companies.filter(company => company.id !== action.payload)
         },
@@ -25,5 +31,5 @@ const companiesSlice = createSlice({
     }
 })
 
-export const {addCompany, removeCompany, clearCompanies} = companiesSlice.actions
+export const {addCompany, updateCompany, removeCompany, clearCompanies} = companiesSlice.actions
 export default companiesSlice.reducer
