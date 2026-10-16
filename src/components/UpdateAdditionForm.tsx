@@ -62,7 +62,7 @@ function UpdateAdditionForm({vacancy}: Props) {
                 }))
             } else if (updateType !== '') {
                 dispatch(addUpdate({
-                    id: newId, vacancyId: vacancy.id, type: updateType as InterviewUpdateType,
+                    id: newId, vacancyId: vacancy.id, type: updateType as UpdateType,
                     datetime: `${updateDate}T${updateTime}`, description: description.trim()
                 }))
             }
