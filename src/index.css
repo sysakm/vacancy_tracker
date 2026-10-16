@@ -15,6 +15,25 @@
   --danger: #a84050;
   --danger-soft: #fff0f2;
   --success: #38745c;
+  --funnel-total: #5c40ad;
+  --funnel-applied: #315f9b;
+  --funnel-interview: #885506;
+  --funnel-checks: #13756b;
+  --funnel-offer: #347452;
+  --status-idle: #666170;
+  --status-idle-bg: #eeecf2;
+  --status-applied: #315f9b;
+  --status-applied-bg: #eaf1fb;
+  --status-interview: #825406;
+  --status-interview-bg: #fff3d8;
+  --status-checks: #13756b;
+  --status-checks-bg: #e4f5f2;
+  --status-offer: #347452;
+  --status-offer-bg: #e8f5ed;
+  --status-rejected: #a84050;
+  --status-rejected-bg: #fff0f2;
+  --status-withdrawn: #716b78;
+  --status-withdrawn-bg: #efedf1;
   --shadow-sm: 0 2px 8px rgba(38, 26, 72, 0.06);
   --shadow-md: 0 14px 34px rgba(38, 26, 72, 0.1);
   --radius-sm: 8px;
@@ -49,6 +68,20 @@
     --danger: #ee8e9b;
     --danger-soft: #3d252d;
     --success: #8bc5a8;
+    --status-idle: #c2bbc9;
+    --status-idle-bg: #383441;
+    --status-applied: #a9c8f3;
+    --status-applied-bg: #27354a;
+    --status-interview: #f1ca76;
+    --status-interview-bg: #45391f;
+    --status-checks: #8bd4c8;
+    --status-checks-bg: #203a37;
+    --status-offer: #9ed4b0;
+    --status-offer-bg: #233b2e;
+    --status-rejected: #f0a0aa;
+    --status-rejected-bg: #3d252d;
+    --status-withdrawn: #c4bdc9;
+    --status-withdrawn-bg: #37333d;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.3);
   }
@@ -276,10 +309,54 @@ p {
 }
 
 .dashboard-table td:first-child {
-  color: var(--accent-strong);
-  font-size: 0.83rem;
-  font-weight: 750;
   white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.76rem;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.status-pill--idle {
+  color: var(--status-idle);
+  background: var(--status-idle-bg);
+}
+
+.status-pill--applied {
+  color: var(--status-applied);
+  background: var(--status-applied-bg);
+}
+
+.status-pill--interview {
+  color: var(--status-interview);
+  background: var(--status-interview-bg);
+}
+
+.status-pill--checks {
+  color: var(--status-checks);
+  background: var(--status-checks-bg);
+}
+
+.status-pill--offer {
+  color: var(--status-offer);
+  background: var(--status-offer-bg);
+}
+
+.status-pill--rejected {
+  color: var(--status-rejected);
+  background: var(--status-rejected-bg);
+}
+
+.status-pill--withdrawn {
+  color: var(--status-withdrawn);
+  background: var(--status-withdrawn-bg);
 }
 
 .dashboard-table td:nth-child(2) a {
@@ -723,10 +800,11 @@ button:active:not(:disabled) {
   min-height: 54px;
 }
 
-.funnel-stage:nth-child(2) { --color: #684db7; }
-.funnel-stage:nth-child(3) { --color: #745ac0; }
-.funnel-stage:nth-child(4) { --color: #8068c7; }
-.funnel-stage:nth-child(5) { --color: #527866; }
+.funnel-stage:nth-child(1) { --color: var(--funnel-total); }
+.funnel-stage:nth-child(2) { --color: var(--funnel-applied); }
+.funnel-stage:nth-child(3) { --color: var(--funnel-interview); }
+.funnel-stage:nth-child(4) { --color: var(--funnel-checks); }
+.funnel-stage:nth-child(5) { --color: var(--funnel-offer); }
 
 .funnel-stage::before {
   position: absolute;
@@ -798,7 +876,8 @@ button:active:not(:disabled) {
 }
 
 @media (min-width: 960px) {
-  .form__row--company {
+  .form__row--company,
+  .form__row--salary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

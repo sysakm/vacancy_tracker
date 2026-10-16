@@ -11,6 +11,7 @@ import {
     type UpdateType
 } from "@/types/processUpdateTypes.ts"
 import {addUpdate} from "@/features/updates/updatesSlice.ts"
+import {updateTypeToHandleUtil} from "@/utils/vacancyUtils.ts"
 
 type Props = {
     vacancy: Vacancy
@@ -88,22 +89,22 @@ function UpdateAdditionForm({vacancy}: Props) {
                     </option>
                     {startUpdateTypes.map(type => (
                         <option key={`update-type-${type}`} value={type}>
-                            Process start: {type}
+                            Process start: {updateTypeToHandleUtil(type)}
                         </option>
                     ))}
                     {interviewUpdateTypes.map(type => (
                         <option key={`update-type-${type}`} value={type}>
-                            Testing process: {type}
+                            Testing process: {updateTypeToHandleUtil(type)}
                         </option>
                     ))}
                     {checkUpdateTypes.map(type => (
                         <option key={`update-type-${type}`} value={type}>
-                            Checking process: {type}
+                            Checking process: {updateTypeToHandleUtil(type)}
                         </option>
                     ))}
                     {endUpdateTypes.map(type => (
                         <option key={`update-type-${type}`} value={type}>
-                            Process end: {type}
+                            Process end: {updateTypeToHandleUtil(type)}
                         </option>
                     ))}
                 </select>

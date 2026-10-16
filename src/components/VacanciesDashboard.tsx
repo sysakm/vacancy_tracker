@@ -7,12 +7,20 @@ import {
     vacanciesSelector
 } from "@/app/selectors.ts"
 import {Link} from "react-router-dom"
-import {aggregateVacancyDataUtil, statusToNumberValue, type VacancyDashboardEntry} from "@/utils/vacancyUtils.ts"
+import {aggregateVacancyDataUtil, statusToNumberValue, type VacancyDashboardEntry, type VacancyStatus} from "@/utils/vacancyUtils.ts"
 import {useMemo, useState} from "react"
 
 const filterTypes = ['all', 'not applied', 'ongoing process', 'next steps', 'offer', 'unresolved'] as const
 type FilterType = (typeof filterTypes)[number]
 
+const filterTypeToLabel: Record<FilterType, string> = {
+    'all': 'All',
+    'not applied': 'Not Applied',
+    'ongoing process': 'Ongoing Process',
+    'next steps': 'Has Next Step',
+    'offer': 'Offer',
+    'unresolved': 'Unresolved'
+}
 const filterTypeToFilter: Record<FilterType, (entry: VacancyDashboardEntry) => boolean> = {
     'all': () => true,
     'not applied': (entry) => entry.status === 'Not Applied',
@@ -26,6 +34,20 @@ const sortingTypes = ['none', 'position', 'date posted', 'salary', 'company', 'n
 const sortingDirections = ['asc', 'desc'] as const
 type SortingType = (typeof sortingTypes)[number]
 type SortingDirection = (typeof sortingDirections)[number]
+
+const sortingTypeToLabel: Record<SortingType, string> = {
+    'none': 'Default',
+    'position': 'Position Name',
+    'date posted': 'Posting Date',
+    'salary': 'Salary',
+    'company': 'Company',
+    'next step': 'Next Step Date',
+    'last update': 'Last Update Date',
+    'status': 'Status'
+}
+const sortingDirectionToLabel: Record<SortingDirection, string> = {
+    'asc': 'Ascending', 'desc': 'Descending'
+}
 
 const sortingTypeToComparator: Record<SortingType, (a: VacancyDashboardEntry, b: VacancyDashboardEntry) => number> = {
     'none': (_a, _b) => 0,
@@ -48,6 +70,17 @@ const sortingTypeToComparator: Record<SortingType, (a: VacancyDashboardEntry, b:
 const sortingDirectionToComparator: Record<SortingDirection, number> = {
     'asc': 1,
     'desc': -1
+}
+const statusToColorClass: Record<VacancyStatus, string> = {
+    'Not Applied': 'status-pill--idle',
+    Applied: 'status-pill--applied',
+    Interviewing: 'status-pill--interview',
+    'Take Home Task': 'status-pill--interview',
+    'Trial Period': 'status-pill--interview',
+    Checking: 'status-pill--checks',
+    Offer: 'status-pill--offer',
+    Reject: 'status-pill--rejected',
+    'Drop Out': 'status-pill--withdrawn'
 }
 const sortingTypeToBottomPredicate = new Map<SortingType, (entry: VacancyDashboardEntry) => boolean>()
 sortingTypeToBottomPredicate.set('salary', // unknown salary at the bottom
@@ -114,7 +147,7 @@ function VacanciesDashboard() {
         <>
             <div className='dashboard-controls'>
                 <label htmlFor='vacancy-search'>
-                    <span>Search vacancy</span>
+                    <span>Search vacancies</span>
                     <input
                         id='vacancy-search'
                         type='search'
@@ -124,13 +157,13 @@ function VacanciesDashboard() {
                     />
                 </label>
                 <label htmlFor='vacancy-filter'>
-                    <span>Show</span>
+                    <span>Filter vacancies</span>
                     <select id='vacancy-filter'
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value as FilterType)}>
                         {filterTypes.map(filter => (
                             <option key={`filter-type-${filter}`} value={filter}>
-                                {filter}
+                                {filterTypeToLabel[filter]}
                             </option>
                         ))}
                     </select>
@@ -142,19 +175,19 @@ function VacanciesDashboard() {
                             onChange={(e) => setSortingType(e.target.value as SortingType)}>
                         {sortingTypes.map(sorting => (
                             <option key={`sorting-type-${sorting}`} value={sorting}>
-                                {sorting}
+                                {sortingTypeToLabel[sorting]}
                             </option>
                         ))}
                     </select>
                 </label>
                 {sortingType !== 'none' && (<label htmlFor='vacancy-sort-direction'>
-                    <span>Direction</span>
+                    <span>Sort direction</span>
                     <select id='vacancy-sort-direction'
                             value={sortingDirection}
                             onChange={(e) => setSortingDirection(e.target.value as SortingDirection)}>
                         {sortingDirections.map(direction => (
                             <option key={`sorting-direction-${direction}`} value={direction}>
-                                {direction}
+                                {sortingDirectionToLabel[direction]}
                             </option>
                         ))}
                     </select>
@@ -173,7 +206,7 @@ function VacanciesDashboard() {
                     </thead>
                     <tbody>
                         {vacancyEntriesFiltered.map(entry => <tr key={`vacancy-dashboard-row-${entry.vacancy.id}`}>
-                            <td>{entry.status}</td>
+                            <td><span className={`status-pill ${statusToColorClass[entry.status]}`}>{entry.status}</span></td>
                             <td><Link to={`/vacancy/${entry.vacancy.id}`}>{entry.vacancy.name} @ {entry.companyName}</Link></td>
                             <td>{entry.salary}</td>
                             <td>{entry.nextStep}</td>

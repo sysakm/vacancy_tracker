@@ -164,7 +164,7 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
                     onChange={(e) => setLink(e.target.value)}
                 />
             </label>
-            <div className='form__row'>
+            <div className={salaryType === 'fork' ? 'form__row form__row--salary' : 'form__row'}>
                 <label htmlFor='salaryType'>
                     <span>Select Salary Information</span>
                     <select id='salaryType'
