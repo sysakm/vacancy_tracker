@@ -6,15 +6,30 @@ import {
     type VacancyUpdate
 } from "@/types/processUpdateTypes.ts"
 
-type VacancyDashboardEntry = {
+export const vacancyStatuses = [
+    'Not Applied',
+    'Applied',
+    'Interviewing',
+    'Take Home Task',
+    'Trial Period',
+    'Checking',
+    'Reject',
+    'Drop Out',
+    'Offer'
+] as const
+
+export type VacancyStatus = (typeof vacancyStatuses)[number]
+
+export type VacancyDashboardEntry = {
     vacancy: Vacancy;
+    salary: string;
     companyName: string;
-    status: string;
+    status: VacancyStatus;
     lastUpdate: string;
     nextStep: string;
 }
 
-export function lastUpdateToStatusUtil(update: UpdateType | undefined): string {
+export function lastUpdateToStatusUtil(update: UpdateType | undefined): VacancyStatus {
     if (!update) return 'Not Applied'
     if (update === 'apply' || update === 'recruiterReachOut' || update === 'referral') return 'Applied'
     if (update === 'inviteToInterview') return 'Interviewing'
@@ -25,6 +40,18 @@ export function lastUpdateToStatusUtil(update: UpdateType | undefined): string {
     if (update === 'selfReject') return 'Drop Out'
     if (update === 'offer') return 'Offer'
     throw new Error('Unexpected update')
+}
+
+export function statusToNumberValue(status: VacancyStatus): number {
+    if (status === 'Not Applied') return -1000
+    if (status === 'Reject' || status === 'Drop Out') return 1000
+    if (status === 'Offer') return 500
+    if (status === 'Applied') return 0
+    if (status === 'Interviewing') return 100
+    if (status === 'Take Home Task') return 200
+    if (status === 'Trial Period') return 400
+    if (status === 'Checking') return 300
+    return 0
 }
 
 export function updateTypeToHandleUtil(update: UpdateType) {
@@ -52,6 +79,9 @@ export function updateTypeToStepTypeUtil(update: InterviewUpdateType) {
 
 export function aggregateVacancyDateUtil(vacancies: Array<Vacancy>, companies: Array<Company>, updates: Array<VacancyUpdate>): Array<VacancyDashboardEntry> {
     function vacancyToEntry(vacancy: Vacancy): VacancyDashboardEntry {
+        const salary = vacancy.salary.type === 'unknown' ? 'unknown' : (
+            vacancy.salary.type === 'fixed' ? `$${vacancy.salary.value}` : `$${vacancy.salary.start}-${vacancy.salary.end}`
+        )
         const vacancyUpdates = updates.filter(update => update.vacancyId === vacancy.id)
         const lastUpdate = vacancyUpdates.length > 0 ? vacancyUpdates.reduce(
             (last, cur) => last.datetime.localeCompare(cur.datetime) < 0 ? cur : last
@@ -69,9 +99,10 @@ export function aggregateVacancyDateUtil(vacancies: Array<Vacancy>, companies: A
 
         return {
             vacancy,
+            salary,
             companyName: companies.find(company => company.id === vacancy.companyId)?.name ?? 'Unknown company',
             status: lastUpdateToStatusUtil(lastUpdate?.type),
-            lastUpdate: lastUpdate ? `${lastUpdate.datetime} - ${updateTypeToHandleUtil(lastUpdate.type)}` : 'No updates yet',
+            lastUpdate: lastUpdate ? `${lastUpdate.datetime} - ${updateTypeToHandleUtil(lastUpdate.type)}` : '-',
             nextStep: nextStep ? `${nextStep.stepDatetime} - ${updateTypeToStepTypeUtil(nextStep.type as InterviewUpdateType)}` : '-',
         }
     }
