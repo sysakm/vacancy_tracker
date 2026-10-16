@@ -5,9 +5,10 @@ function AppLayout() {
         <div>
             <header>
                 <nav>
-                    <NavLink to='/'>Home</NavLink>
+                    <NavLink to='/'>Dashboard</NavLink>
                     <NavLink to='/create'>Add Vacancy</NavLink>
                     <NavLink to='/companies'>Companies</NavLink>
+                    <NavLink to='/stats'>Statistics</NavLink>
                 </nav>
             </header>
             <main>

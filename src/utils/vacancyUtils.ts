@@ -1,5 +1,7 @@
 import type {Company, Vacancy} from "@/types/vacancyTypes.ts"
 import {
+    type CheckUpdateType,
+    checkUpdateTypes,
     type InterviewUpdateType,
     interviewUpdateTypes,
     type UpdateType,
@@ -77,7 +79,20 @@ export function updateTypeToStepTypeUtil(update: InterviewUpdateType) {
     throw new Error('Unexpected update')
 }
 
-export function aggregateVacancyDateUtil(vacancies: Array<Vacancy>, companies: Array<Company>, updates: Array<VacancyUpdate>): Array<VacancyDashboardEntry> {
+export function calculateStatuses(vacancies: Array<Vacancy>, updates: Array<VacancyUpdate>): Array<VacancyStatus> {
+    function vacancyToStatus(vacancy: Vacancy): VacancyStatus {
+        const vacancyUpdates = updates.filter(update => update.vacancyId === vacancy.id)
+        const lastUpdate = vacancyUpdates.length > 0 ? vacancyUpdates.reduce(
+            (last, cur) => last.datetime.localeCompare(cur.datetime) < 0 ? cur : last
+        ) : null
+
+        return lastUpdateToStatusUtil(lastUpdate?.type)
+    }
+    return vacancies.map(vacancyToStatus)
+
+}
+
+export function aggregateVacancyDataUtil(vacancies: Array<Vacancy>, companies: Array<Company>, updates: Array<VacancyUpdate>): Array<VacancyDashboardEntry> {
     function vacancyToEntry(vacancy: Vacancy): VacancyDashboardEntry {
         const salary = vacancy.salary.type === 'unknown' ? 'unknown' : (
             vacancy.salary.type === 'fixed' ? `$${vacancy.salary.value}` : `$${vacancy.salary.start}-${vacancy.salary.end}`
@@ -107,4 +122,49 @@ export function aggregateVacancyDateUtil(vacancies: Array<Vacancy>, companies: A
         }
     }
     return vacancies.map(vacancyToEntry)
+}
+
+export const funnelSteps = ['Total', 'Applied', 'Interview', 'Checks', 'Offer'] as const
+export type FunnelStep = typeof funnelSteps[number]
+
+export function calculateVacancyFunnel(vacancies: Array<Vacancy>, updates: Array<VacancyUpdate>): Record<FunnelStep, number> {
+    const validVacIds = new Set(vacancies.map(vacancy => vacancy.id))
+    const vacancyToFunnelPosition = new Map<number, FunnelStep>()
+    for (const update of updates) {
+        const vacId = update.vacancyId
+        if (!validVacIds.has(update.vacancyId)) continue
+
+        const curPosition = vacancyToFunnelPosition.get(vacId)
+        if (!curPosition) {
+            if (update.type === 'offer') vacancyToFunnelPosition.set(vacId, 'Offer')
+            else if (checkUpdateTypes.includes(update.type as CheckUpdateType)) vacancyToFunnelPosition.set(vacId, 'Checks')
+            else if (interviewUpdateTypes.includes(update.type as InterviewUpdateType)) vacancyToFunnelPosition.set(vacId, 'Interview')
+            else vacancyToFunnelPosition.set(vacId, 'Applied')
+        } else if (curPosition === 'Applied') {
+            if (update.type === 'offer') vacancyToFunnelPosition.set(vacId, 'Offer')
+            else if (checkUpdateTypes.includes(update.type as CheckUpdateType)) vacancyToFunnelPosition.set(vacId, 'Checks')
+            else if (interviewUpdateTypes.includes(update.type as InterviewUpdateType)) vacancyToFunnelPosition.set(vacId, 'Interview')
+        } else if (curPosition === 'Interview') {
+            if (update.type === 'offer') vacancyToFunnelPosition.set(vacId, 'Offer')
+            else if (checkUpdateTypes.includes(update.type as CheckUpdateType)) vacancyToFunnelPosition.set(vacId, 'Checks')
+        } else if (curPosition === 'Checks') {
+            if (update.type === 'offer') vacancyToFunnelPosition.set(vacId, 'Offer')
+        }
+    }
+
+    const funnel = {
+        'Total': vacancies.length,
+        'Applied': 0,
+        'Interview': 0,
+        'Checks': 0,
+        'Offer': 0
+    }
+    vacancyToFunnelPosition.forEach((val) => {
+        funnel['Applied'] += 1
+        if (val === 'Interview' || val === 'Checks' || val === 'Offer') funnel['Interview'] += 1
+        if (val === 'Checks' || val === 'Offer') funnel['Checks'] += 1
+        if (val === 'Offer') funnel['Offer'] += 1
+    })
+
+    return funnel
 }

@@ -1,0 +1,52 @@
+.funnel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.funnel-stage {
+    --t-width: 1;
+    --b-width: 1;
+    --color: #4f46e5;
+
+    --top-width: calc(max(1%, 100% * var(--t-width)));
+    --bottom-width: calc(max(1%, 100% * var(--b-width)));
+
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.funnel-stage::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--color);
+
+    clip-path: polygon(
+            calc(50% - var(--top-width) / 2) 0%,
+            calc(50% + var(--top-width) / 2) 0%,
+            calc(50% + var(--bottom-width) / 2) 100%,
+            calc(50% - var(--bottom-width) / 2) 100%
+    );
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.stage-label {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-family: system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    text-align: center;
+}

@@ -7,7 +7,7 @@ import {
     vacanciesSelector
 } from "@/app/selectors.ts"
 import {Link} from "react-router-dom"
-import {aggregateVacancyDateUtil, statusToNumberValue, type VacancyDashboardEntry} from "@/utils/vacancyUtils.ts"
+import {aggregateVacancyDataUtil, statusToNumberValue, type VacancyDashboardEntry} from "@/utils/vacancyUtils.ts"
 import {useMemo, useState} from "react"
 
 const filterTypes = ['all', 'not applied', 'ongoing process', 'next steps', 'offer', 'unresolved'] as const
@@ -77,7 +77,7 @@ function VacanciesDashboard() {
 
     const query = searchQuery.trim().toLowerCase()
     const vacancyEntries = useMemo(
-        () => aggregateVacancyDateUtil(vacancies, companies, updates),
+        () => aggregateVacancyDataUtil(vacancies, companies, updates),
         [vacancies, companies, updates]
     )
     const vacancyEntriesFiltered = useMemo(() => {
