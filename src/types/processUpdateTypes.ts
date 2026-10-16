@@ -36,6 +36,7 @@ export type StepType = 'posted' | UpdateType | 'interview' | 'deadline'
 export type VacancyStep = {
     baseId?: number;
     type: StepType;
+    label: string;
     datetime: string;
     description: string;
 }

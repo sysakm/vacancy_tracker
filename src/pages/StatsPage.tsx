@@ -8,7 +8,7 @@ function StatsPage() {
     const vacancies = useAppSelector(vacanciesSelector)
     const updates = useAppSelector(updatesSelector)
     return (
-        <section>
+        <section className='page page--stats'>
             <h1>Statistics</h1>
             <StatisticsCounts vacancies={vacancies} companies={companies} updates={updates}/>
             <StatisticsFunnel vacancies={vacancies} updates={updates}/>

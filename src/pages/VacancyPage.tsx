@@ -42,20 +42,20 @@ function VacancyPage() {
     }
 
     return (
-        <section>
+        <section className='page page--vacancy'>
             <h1>{vacancy ? `${vacancy.name} @ ${company?.name ?? 'Unknown Company'}` : 'Error displaying vacancy'}</h1>
             {vacancy ?
                 <>
-                    <nav>
+                    <nav className='vacancy-page__tabs' aria-label='Vacancy details'>
                         {subPageEntries.map(entry => (
-                            <button key={'sub-page'+entry} type='button' disabled={subPage===entry} onClick={() => setSubPage(entry)}>
+                            <button className='vacancy-page__tab' key={'sub-page'+entry} type='button' aria-pressed={subPage===entry} disabled={subPage===entry} onClick={() => setSubPage(entry)}>
                                 {entry}
                             </button>
                         ))}
                     </nav>
                     {subPage === 'description' && (<>
                         <VacancyCard vacancy={vacancy} company={company}/>
-                        <div>
+                        <div className='vacancy-page__actions'>
                             {isEditing ?
                                 <>
                                     <VacancyEditorForm
@@ -64,14 +64,14 @@ function VacancyPage() {
                                         onCreateNewCompany={handleCreateNewCompany}
                                         onSubmit={handleFormSubmit}
                                     />
-                                    <button type='button' onClick={() => setIsEditing(false)}>Leave without editing</button>
+                                    <button className='button--quiet' type='button' onClick={() => setIsEditing(false)}>Leave without editing</button>
                                 </>
                                 :
                                 <button type='button' onClick={() => setIsEditing(true)}>
                                     Edit this vacancy
                                 </button>
                             }
-                            <button type='button' onClick={handleDeleteVacancy}>
+                            <button className='button--danger' type='button' onClick={handleDeleteVacancy}>
                                 Delete vacancy
                             </button>
                         </div>

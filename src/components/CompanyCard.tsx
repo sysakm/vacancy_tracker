@@ -40,13 +40,13 @@ function CompanyCard({company, vacancies}: Props) {
     }
 
     return (
-        <div key={`company-${company.id}`}>
-            {!isOriginalLinkEmpty ? <a href={company.link}>{company.name}</a> : <span>{company.name}</span>}
+        <article className='company-card' key={`company-${company.id}`}>
+            {!isOriginalLinkEmpty ? <a className='company-card__name' href={company.link}>{company.name}</a> : <span className='company-card__name'>{company.name}</span>}
             {isOriginalLinkEmpty && <button type='button' onClick={() => setDisplayLinkForm(!displayLinkForm)}>
                 {displayLinkForm ? 'Close without adding' : 'Add a link'}
             </button>}
             {isOriginalLinkEmpty && displayLinkForm &&
-                <form onSubmit={handleSubmit}>
+                <form className='form form--wide' onSubmit={handleSubmit}>
                     <label htmlFor={`companyNewLink-${company.id}`}>
                         <span>Link</span>
                         <input
@@ -58,17 +58,17 @@ function CompanyCard({company, vacancies}: Props) {
                     {error && (<p className='form__error' role='alert'>{error}</p>)}
                 </form>
             }
-            <button type='button' onClick={() => dispatch(removeCompanyCascade(company.id))}>
+            <button className='button--danger' type='button' onClick={() => dispatch(removeCompanyCascade(company.id))}>
                 Delete
             </button>
             <button type='button' onClick={() => setDisplayVacancies(!displayVacancies)}>
                 {displayVacancies ? 'Hide vacancies' : 'Show vacancies'}
             </button>
-            {displayVacancies && vacancies.length > 0 && (vacancies.map(vacancy => <div key={`vacancy-link-${company.id}-${vacancy.id}`}>
+            {displayVacancies && vacancies.length > 0 && (vacancies.map(vacancy => <div className='company-card__vacancy' key={`vacancy-link-${company.id}-${vacancy.id}`}>
                 <Link to={`/vacancy/${vacancy.id}`}>{vacancy.name} (posted {vacancy.datePosted})</Link>
             </div>))}
             {displayVacancies && vacancies.length === 0 && <p>No vacancies tracked for {company.name}.</p>}
-        </div>
+        </article>
     )
 }
 

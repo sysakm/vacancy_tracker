@@ -6,9 +6,9 @@ function CompaniesPage() {
     const vacancies = useAppSelector(vacanciesSelector)
     const companies = useAppSelector(companiesSelector)
     return (
-        <section>
+        <section className='page page--companies'>
             <h1>Companies</h1>
-            <div>
+            <div className='companies-list'>
                 {companies.map(company => <CompanyCard
                     key={`company-${company.id}`}
                     company={company}

@@ -77,7 +77,7 @@ function UpdateAdditionForm({vacancy}: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className='form form--wide' onSubmit={handleSubmit}>
             <h5>Add An Update</h5>
             <label htmlFor='updateType'>
                 <select id='updateType'
@@ -108,7 +108,7 @@ function UpdateAdditionForm({vacancy}: Props) {
                     ))}
                 </select>
             </label>
-            <div>
+            <div className='form__row'>
                 <label htmlFor='updateDate'>
                     <span>Update Date</span>
                     <input
@@ -131,7 +131,7 @@ function UpdateAdditionForm({vacancy}: Props) {
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </label>
-            {interviewUpdateTypes.includes(updateType as InterviewUpdateType) && <div>
+            {interviewUpdateTypes.includes(updateType as InterviewUpdateType) && <div className='form__row'>
                 <label htmlFor='stepDate'>
                     <span>Interview/Deadline Date</span>
                     <input

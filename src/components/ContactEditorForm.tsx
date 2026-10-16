@@ -68,7 +68,7 @@ function ContactEditorForm({onSubmit, contact, vacancyId}: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className='form form--wide' onSubmit={handleSubmit}>
             <label htmlFor='contactType'>
                 <span>Type</span>
                 <select id='contactType'
@@ -95,7 +95,7 @@ function ContactEditorForm({onSubmit, contact, vacancyId}: Props) {
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </label>
-            <div>
+            <div className='form__row'>
                 <label htmlFor='contactPhone'>
                     <span>Phone</span>
                     <input

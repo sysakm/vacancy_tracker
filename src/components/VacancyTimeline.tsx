@@ -1,8 +1,9 @@
 import type {Company, Vacancy} from "@/types/vacancyTypes.ts"
 import {useAppDispatch, useAppSelector} from "@/app/hooks.ts"
 import {updatesSelector} from "@/app/selectors.ts"
-import type {VacancyStep, VacancyUpdate} from "@/types/processUpdateTypes.ts"
+import type {InterviewUpdateType, VacancyStep, VacancyUpdate} from "@/types/processUpdateTypes.ts"
 import {removeUpdate} from "@/features/updates/updatesSlice.ts";
+import {updateTypeToHandleUtil, updateTypeToStepTypeUtil} from "@/utils/vacancyUtils.ts"
 
 type Props = {
     vacancy: Vacancy;
@@ -11,13 +12,20 @@ type Props = {
 
 function createTimelineFromUpdates(vacancy: Vacancy, company: Company | undefined, updates: Array<VacancyUpdate>): Array<VacancyStep> {
     let timeline: Array<VacancyStep> = [
-        {type: 'posted', datetime: `${vacancy.datePosted}T00:00`, description: `${vacancy.name} @ ${company?.name ?? 'Unknown company'}`}
+        {type: 'posted', label: 'Posted', datetime: `${vacancy.datePosted}T00:00`, description: `${vacancy.name} @ ${company?.name ?? 'Unknown company'}`}
     ]
     for (const update of updates) {
-        timeline.push({baseId: update.id, type: update.type, datetime: update.datetime, description: update.description})
+        timeline.push({
+            baseId: update.id,
+            type: update.type,
+            label: updateTypeToHandleUtil(update.type),
+            datetime: update.datetime,
+            description: update.description
+        })
         if (update.stepDatetime) {
             timeline.push({
                 type: update.type==='inviteToInterview' ? 'interview' : 'deadline',
+                label: updateTypeToStepTypeUtil(update.type as InterviewUpdateType),
                 datetime: update.stepDatetime, description: update.description
             })
         }
@@ -36,15 +44,15 @@ function VacancyTimeline({vacancy, company}: Props) {
     }
 
     return (
-        <section>
+        <section className='timeline-panel'>
             <h3>Timeline of {vacancy.name} @ {company?.name ?? 'Unknown Company'}</h3>
-            <dl>
+            <dl className='timeline-list'>
                 {timeline.map((step, idx) => (
                     <div key={`${vacancy.id}-step-${idx}`}>
-                        <dt>{step.datetime} - {step.type}</dt>
+                        <dt>{step.datetime} - {step.label}</dt>
                         <dd>{step.description}</dd>
                         {step.baseId && <dd>
-                            <button type='button' onClick={() => handleRemoveUpdate(step.baseId)}>Delete Update</button>
+                            <button className='button--danger' type='button' onClick={() => handleRemoveUpdate(step.baseId)}>Delete Update</button>
                         </dd>}
                     </div>
                 ))}

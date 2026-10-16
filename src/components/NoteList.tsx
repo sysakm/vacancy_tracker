@@ -31,22 +31,22 @@ function NoteList({vacancy, company}: Props) {
     }
 
     return (
-        <section>
+        <section className='notes-panel'>
             <h3>Notes for {vacancy.name} @ {company?.name ?? 'Unknown Company'}</h3>
-            <div>
+            <div className='notes-list'>
                 {notes.map((note, idx) => (note.id !== currentEditingNote?.id ?
-                    <div key={`note-${note.id}`}>
+                    <div className='note-card' key={`note-${note.id}`}>
                         <p>{idx+1} {note.note}</p>
-                        <span>
-                            <button type='button' onClick={() => setCurrentEditingNote(note)}>
+                        <span className='record-actions'>
+                            <button className='button--quiet' type='button' onClick={() => setCurrentEditingNote(note)}>
                                 Edit
                             </button>
-                            <button type='button' onClick={() => handleRemoveNote(note.id)}>
+                            <button className='button--danger' type='button' onClick={() => handleRemoveNote(note.id)}>
                                 Delete
                             </button>
                         </span>
                     </div> :
-                    <div key={`note-edit-${note.id}`}>
+                    <div className='note-card' key={`note-edit-${note.id}`}>
                         <aside>{idx+1}</aside>
                         <NoteEditorForm
                             onSubmit={handleUpdateNote}

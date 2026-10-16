@@ -3,7 +3,7 @@ import VacanciesDashboard from "@/components/VacanciesDashboard.tsx"
 
 function HomePage() {
     return (
-        <section>
+        <section className='page page--dashboard'>
             <h1>Home Page</h1>
             <VacanciesDashboard/>
         </section>

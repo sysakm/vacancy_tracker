@@ -18,7 +18,7 @@ function VacancyCreationPage() {
     }
 
     return (
-        <section>
+        <section className='page page--create'>
             <h1>Create A Vacancy</h1>
             <VacancyEditorForm
                 onCreateNewCompany={handleCreateNewCompany}

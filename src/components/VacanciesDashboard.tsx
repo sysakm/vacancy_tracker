@@ -112,13 +112,13 @@ function VacanciesDashboard() {
 
     return (
         <>
-            <div>
+            <div className='dashboard-controls'>
                 <label htmlFor='vacancy-search'>
                     <span>Search vacancy</span>
                     <input
                         id='vacancy-search'
                         type='search'
-                        placeholder='Vacancy, company, description, note'
+                        placeholder='Vacancy, company, description, note...'
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -160,8 +160,8 @@ function VacanciesDashboard() {
                     </select>
                 </label>)}
             </div>
-            <div>
-                <table>
+            <div className='dashboard-table-wrap'>
+                <table className='dashboard-table'>
                     <thead>
                         <tr>
                             <th>Status</th>

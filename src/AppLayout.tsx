@@ -2,16 +2,16 @@ import {NavLink, Outlet} from "react-router-dom"
 
 function AppLayout() {
     return (
-        <div>
-            <header>
-                <nav>
-                    <NavLink to='/'>Dashboard</NavLink>
-                    <NavLink to='/create'>Add Vacancy</NavLink>
-                    <NavLink to='/companies'>Companies</NavLink>
-                    <NavLink to='/stats'>Statistics</NavLink>
+        <div className='app-shell'>
+            <header className='app-header'>
+                <nav className='app-header__nav' aria-label='Main navigation'>
+                    <NavLink className={({isActive}) => `app-header__link${isActive ? ' app-header__link--active' : ''}`} to='/'>Dashboard</NavLink>
+                    <NavLink className={({isActive}) => `app-header__link${isActive ? ' app-header__link--active' : ''}`} to='/create'>Add Vacancy</NavLink>
+                    <NavLink className={({isActive}) => `app-header__link${isActive ? ' app-header__link--active' : ''}`} to='/companies'>Companies</NavLink>
+                    <NavLink className={({isActive}) => `app-header__link${isActive ? ' app-header__link--active' : ''}`} to='/stats'>Statistics</NavLink>
                 </nav>
             </header>
-            <main>
+            <main className='app-main'>
                 <Outlet/>
             </main>
         </div>

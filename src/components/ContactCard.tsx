@@ -6,7 +6,7 @@ type Props = {
 
 function ContactCard({contact}: Props) {
     return (
-        <article>
+        <article className='contact-card'>
             <h5>{contact.name} ({contact.type === 'other' ? 'contact' : contact.type})</h5>
             {contact.description && <p>{contact.description}</p>}
             <dl>

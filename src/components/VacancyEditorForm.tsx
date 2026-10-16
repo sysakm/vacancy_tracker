@@ -104,8 +104,8 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form className='form form--vacancy' onSubmit={handleSubmit}>
+            <div className={selectedCompany ? 'form__row' : 'form__row form__row--company'}>
                 <label htmlFor='companyId'>
                     <span>Select Company</span>
                     <select id='companyId'
@@ -145,8 +145,8 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
             </label>
             <label htmlFor='description'>
                 <span>Job Description</span>
-                <input
-                    id='description' type='text' value={description}
+                <textarea
+                    id='description' value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </label>
@@ -164,7 +164,7 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
                     onChange={(e) => setLink(e.target.value)}
                 />
             </label>
-            <div>
+            <div className='form__row'>
                 <label htmlFor='salaryType'>
                     <span>Select Salary Information</span>
                     <select id='salaryType'
@@ -192,7 +192,7 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
                     />
                 </label>}
             </div>
-            <div>
+            <div className='record-actions'>
                 <button type='submit'>{vacancy ? 'Update vacancy' : 'Add vacancy'}</button>
             </div>
             {error && (<p className='form__error' role='alert'>{error}</p>)}

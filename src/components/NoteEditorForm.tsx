@@ -36,7 +36,7 @@ function NoteEditorForm({onSubmit, note, vacancyId}: Props) {
         }
     }
     return (
-        <form onSubmit={handleSubmit}>
+        <form className='form form--wide' onSubmit={handleSubmit}>
             <label htmlFor='noteText'>
                 <span>Note Text</span>
                 <textarea

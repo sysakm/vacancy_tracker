@@ -31,29 +31,29 @@ function ContactList({vacancy, company}: Props) {
         dispatch(removeContact(id))
     }
     return (
-        <section>
+        <section className='contact-panel'>
             <h3>Contacts for {vacancy.name} @ {company?.name ?? 'Unknown Company'}</h3>
-            {(company?.link || vacancy.link) && <div>
+            {(company?.link || vacancy.link) && <div className='contact-panel__links'>
                 <h4>Links</h4>
                 {company?.link && <a href={company.link}>Company page</a>}
                 {vacancy?.link && <a href={vacancy.link}>Vacancy posting</a>}
             </div>}
-            <div>
+            <div className='contact-list'>
                 <h4>Available contacts</h4>
                 {contacts.length === 0 && <span>No contacts yet</span>}
                 {contacts.map(contact => (contact.id !== currentEditingContact?.id ?
-                    <div key={`contact-${contact.id}`}>
+                    <div className='contact-record' key={`contact-${contact.id}`}>
                         <ContactCard contact={contact}/>
-                        <span>
-                            <button type='button' onClick={() => setCurrentEditingContact(contact)}>
+                        <span className='record-actions'>
+                            <button className='button--quiet' type='button' onClick={() => setCurrentEditingContact(contact)}>
                                 Edit
                             </button>
-                            <button type='button' onClick={() => handleRemoveContact(contact.id)}>
+                            <button className='button--danger' type='button' onClick={() => handleRemoveContact(contact.id)}>
                                 Delete
                             </button>
                         </span>
                     </div>
-                : <div key={`contact-edit-${contact.id}`}>
+                : <div className='contact-record' key={`contact-edit-${contact.id}`}>
                     <ContactEditorForm
                         onSubmit={handleUpdateContact}
                         contact={currentEditingContact}
@@ -62,7 +62,7 @@ function ContactList({vacancy, company}: Props) {
                 </div>
                 ))}
             </div>
-            {!currentEditingContact && <div>
+            {!currentEditingContact && <div className='contact-add'>
                 <h4>Add a new contact</h4>
                 <ContactEditorForm
                     key={`contact-editor-${vacancy.id}-${contacts.length}`}

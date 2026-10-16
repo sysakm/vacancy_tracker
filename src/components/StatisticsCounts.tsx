@@ -13,7 +13,8 @@ function StatisticsCounts({vacancies, companies, updates}: Props) {
 
     return (
         <>
-            <div>
+            <div className='stats-grid'>
+            <article className='stats-card'>
                 <dl>
                     <h5>Stored data:</h5>
                     <div>
@@ -29,8 +30,8 @@ function StatisticsCounts({vacancies, companies, updates}: Props) {
                         <dd>{updates.length}</dd>
                     </div>
                 </dl>
-            </div>
-            <div>
+            </article>
+            <article className='stats-card'>
                 <dl>
                     <h5>Vacancies:</h5>
                     <div>
@@ -65,6 +66,7 @@ function StatisticsCounts({vacancies, companies, updates}: Props) {
                         </dd>
                     </div>
                 </dl>
+            </article>
             </div>
         </>
     )

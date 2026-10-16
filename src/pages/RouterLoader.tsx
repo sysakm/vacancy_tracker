@@ -1,5 +1,3 @@
-import '@/pages/RouterLoader.css'
-
 function RouterLoader() {
     return (
         <section className='page router-loader' role='status' aria-live='polite'>
