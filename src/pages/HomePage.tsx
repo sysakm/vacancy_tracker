@@ -1,17 +1,11 @@
-import {vacanciesSelector} from "@/app/selectors.ts"
-import {useAppSelector} from "@/app/hooks.ts"
-import {Link} from "react-router-dom"
+import VacanciesDashboard from "@/components/VacanciesDashboard.tsx"
+
 
 function HomePage() {
-    const vacancies = useAppSelector(vacanciesSelector)
     return (
         <section>
             <h1>Home Page</h1>
-            <div>
-                {vacancies.map(vacancy => <div key={`vacancy-link-${vacancy.id}`}>
-                    <Link to={`/vacancy/${vacancy.id}`}>{vacancy.name}</Link>
-                </div>)}
-            </div>
+            <VacanciesDashboard/>
         </section>
     )
 }

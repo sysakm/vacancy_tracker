@@ -1,6 +1,6 @@
 import {useAppSelector} from "@/app/hooks.ts"
 import {companiesSelector, vacanciesSelector} from "@/app/selectors.ts"
-import CompanyCard from "@/components/CompanyCard.tsx";
+import CompanyCard from "@/components/CompanyCard.tsx"
 
 function CompaniesPage() {
     const vacancies = useAppSelector(vacanciesSelector)
