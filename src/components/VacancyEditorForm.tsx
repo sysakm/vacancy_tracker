@@ -8,12 +8,14 @@ type Props = {
     onCreateNewCompany: (companyId: number, name: string, link?: string) => void;
     onSubmit: (formData: Vacancy) => void;
     vacancy?: Vacancy;
+    firstUpdateDatetime?: string;
 }
 
 function validateForm(
     selectedCompany: Company | undefined, newCompanyName: string, newCompanyLink: string,
     name: string, description: string, date: string, link: string,
-    salaryType: SalaryType, salaryFirst: number, salarySecond: number): string | null {
+    salaryType: SalaryType, salaryFirst: number, salarySecond: number,
+    firstUpdateDatetime?: string): string | null {
     if (!selectedCompany && !newCompanyName.trim()) return 'New company name can not be empty'
     if (!selectedCompany && newCompanyLink && !newCompanyLink.trim()) return 'Please enter a valid company link or leave the field empty'
     if (!name.trim()) return 'Vacancy name can not be empty'
@@ -24,6 +26,8 @@ function validateForm(
     if (salaryType === 'fork' && (
         isNaN(salaryFirst) || salaryFirst <= 0 ||
         isNaN(salarySecond) || salarySecond <= 0 || salaryFirst >= salarySecond)) return 'Please enter a valid salary range'
+    if (firstUpdateDatetime && firstUpdateDatetime.slice(0, 10).localeCompare(date) < 0)
+        return 'Can not set posting date later than the first present update'
     return null
 }
 
@@ -33,7 +37,7 @@ function createSalaryObject(salaryType: SalaryType, salaryFirst: number, salaryS
     else return {type: 'fork', start: salaryFirst, end: salarySecond}
 }
 
-function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
+function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy, firstUpdateDatetime}: Props) {
     const [companyId, setCompanyId] = useState(vacancy?.companyId.toString() ?? '')
     const [newCompanyName, setNewCompanyName] = useState('')
     const [newCompanyLink, setNewCompanyLink] = useState('')
@@ -72,7 +76,8 @@ function VacancyEditorForm({onCreateNewCompany, onSubmit, vacancy}: Props) {
         const newError = validateForm(
             selectedCompany, newCompanyName, newCompanyLink,
             name, description, date, link,
-            salaryType, salaryFirst, salarySecond
+            salaryType, salaryFirst, salarySecond,
+            firstUpdateDatetime
         )
         if (newError) {
             setError(newError)

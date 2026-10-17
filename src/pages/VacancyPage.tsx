@@ -1,6 +1,6 @@
 import {Link, useNavigate, useParams} from "react-router-dom"
 import {useAppDispatch, useAppSelector} from "@/app/hooks.ts"
-import {companiesSelector, vacanciesSelector} from "@/app/selectors.ts"
+import {companiesSelector, updatesSelector, vacanciesSelector} from "@/app/selectors.ts"
 import {addCompany} from "@/features/companies/companiesSlice.ts"
 import type {Vacancy} from "@/types/vacancyTypes.ts"
 import {removeVacancy, updateVacancy} from "@/features/vacancies/vacanciesSlice.ts"
@@ -9,8 +9,8 @@ import VacancyEditorForm from "@/components/VacancyEditorForm.tsx"
 import VacancyCard from "@/components/VacancyCard.tsx"
 import NoteList from "@/components/NoteList.tsx"
 import ContactList from "@/components/ContactList.tsx"
-import UpdateAdditionForm from "@/components/UpdateAdditionForm.tsx";
-import VacancyTimeline from "@/components/VacancyTimeline.tsx";
+import UpdateAdditionForm from "@/components/UpdateAdditionForm.tsx"
+import VacancyTimeline from "@/components/VacancyTimeline.tsx"
 
 const subPageEntries = [
     'description', 'timeline', 'contacts', 'notes'
@@ -23,6 +23,12 @@ function VacancyPage() {
         .find(vac => params.id && vac.id.toString() === params.id)
     const company = useAppSelector(companiesSelector)
         .find(comp => comp.id === vacancy?.companyId)
+    const updates = useAppSelector(updatesSelector)
+        .filter(update => update.vacancyId === vacancy?.id)
+    const firstUpdate = updates.length > 0 ?
+        updates.reduce((earliest, current) =>
+            earliest.datetime.localeCompare(current.datetime) > 0 ? current : earliest
+        ) : undefined
     const dispatch = useAppDispatch()
     const [isEditing, setIsEditing] = useState(false)
     const [subPage, setSubPage] = useState<typeof subPageEntries[number]>('description')
@@ -61,6 +67,7 @@ function VacancyPage() {
                                     <VacancyEditorForm
                                         key={vacancy.id}
                                         vacancy={vacancy}
+                                        firstUpdateDatetime={firstUpdate?.datetime}
                                         onCreateNewCompany={handleCreateNewCompany}
                                         onSubmit={handleFormSubmit}
                                     />

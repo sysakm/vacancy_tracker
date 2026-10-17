@@ -38,6 +38,14 @@ function CompanyCard({company, vacancies}: Props) {
             setError('')
         }
     }
+    function handleDelete() {
+        if (vacancies.length === 0 || confirm(
+                `Are you sure you want to delete this company? `+
+                `Its ${vacancies.length} ${vacancies.length > 1 ? 'vacancies' : 'vacancy'} will get deleted as well.`
+            )) {
+            dispatch(removeCompanyCascade(company.id))
+        }
+    }
 
     return (
         <article className='company-card' key={`company-${company.id}`}>
@@ -58,7 +66,7 @@ function CompanyCard({company, vacancies}: Props) {
                     {error && (<p className='form__error' role='alert'>{error}</p>)}
                 </form>
             }
-            <button className='button--danger' type='button' onClick={() => dispatch(removeCompanyCascade(company.id))}>
+            <button className='button--danger' type='button' onClick={handleDelete}>
                 Delete
             </button>
             <button type='button' onClick={() => setDisplayVacancies(!displayVacancies)}>
